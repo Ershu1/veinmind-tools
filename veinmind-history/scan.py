@@ -3,7 +3,16 @@ import click
 import os
 import re
 import jsonpickle
+import logging
 import pytoml as toml
+
+# logger
+formatter = logging.Formatter('%(asctime)s %(levelname)-8s %(message)s')
+handler = logging.StreamHandler()
+handler.setFormatter(formatter)
+logger = logging.getLogger("veinmind-history")
+logger.setLevel(logging.INFO)
+logger.addHandler(handler)
 
 def load_rules():
     global rules
@@ -58,7 +67,7 @@ def cli(engine, name, output):
             else:
                 ref = image.id()
             report.imagename = ref
-            logger.info("start scan: " + ref)
+            print("start scan: " + ref)
 
             ocispec = image.ocispec_v1()
             if 'history' in ocispec.keys() and len(ocispec['history']) > 0:
